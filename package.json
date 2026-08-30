@@ -7,11 +7,11 @@
   },
   "scripts": {
     "install:ci": "bash scripts/install-ci.sh",
-    "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vite",
-    "build": "bash scripts/build-verified.sh",
-    "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "test": "npm run build && node --test tests/*.test.mjs",
-    "lint": "bash scripts/sites-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
+    "lint": "eslint .",
     "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate"
   },
   "dependencies": {
@@ -60,5 +60,5 @@
     "wrangler": "4.92.0"
   },
   "type": "module",
-  "displayName": "\u0645\u0637\u0628\u0639\u0629 \u0627\u0644\u0648\u0641\u0627\u0621"
+  "displayName": "مطبعة الوفاء"
 }
