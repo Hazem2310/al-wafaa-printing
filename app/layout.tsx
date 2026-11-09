@@ -3,10 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "مطبعة الوفاء | דפוס אל-ופאא",
-  description: "تصميم وطباعة لجميع المناسبات وهدايا مميزة في كفركنا.",
-  other: {
-    "codex-preview": "development",
-  },
+  description: "تصميم وطباعة وهدايا مميزة في كفركنا | עיצוב, הדפסה ומתנות בכפר כנא.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",

@@ -1,338 +1,48 @@
 "use client";
 
-import { useState } from "react";
-import {
-  ArrowDownLeft,
-  ChevronLeft,
-  Gift,
-  Heart,
-  MapPin,
-  Menu,
-  PenTool,
-  Phone,
-  Printer,
-  School,
-  Sparkles,
-  X,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowDownLeft, AtSign, ChevronLeft, Gift, Heart, MapPin, Menu, MessageCircle, Palette, PenTool, Phone, Printer, School, Sparkles, X } from "lucide-react";
 
 type Locale = "ar" | "he";
+type CatalogItem = { id: string; title: string; description: string; category: string; image: string };
+const WHATSAPP = "https://wa.me/972526269162?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D9%85%D8%B7%D8%A8%D8%B9%D8%A9%20%D8%A7%D9%84%D9%88%D9%81%D8%A7%D8%A1%D8%8C%20%D8%A8%D8%AF%D9%8A%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%AA%D8%B5%D9%85%D9%8A%D9%85%20%D9%88%D8%B7%D8%A8%D8%A7%D8%B9%D8%A9.";
+const INSTAGRAM = "https://www.instagram.com/gr.alwafaa/";
+const CATALOG_KEY = "al-wafaa-catalog";
 
 const content = {
-  ar: {
-    language: "עברית",
-    languageLabel: "التبديل إلى العبرية",
-    brand: "مطبعة الوفاء",
-    brandSub: "בית דפוס אל-ופאא",
-    nav: [
-      { label: "الخدمات", href: "#services" },
-      { label: "أعمالنا", href: "#gallery" },
-      { label: "عن المطبعة", href: "#about" },
-      { label: "تواصل", href: "#contact" },
-    ],
-    hero: {
-      eyebrow: "نطبع الفكرة، ونصنع لها أثرًا",
-      title: "كل مناسبة تستحق أن تُطبع بشكل لا يُنسى.",
-      text: "تصميم، طباعة، وهدايا مميزة بتفاصيل راقية تترك انطباعًا من أول نظرة.",
-      primary: "تواصل معنا الآن",
-      secondary: "اكتشف أعمالنا",
-      note: "تصميم وطباعة لكل مناسبة",
-      featureOne: "تفاصيل فاخرة",
-      featureTwo: "تنفيذ بحب",
-    },
-    services: {
-      eyebrow: "مجالاتنا",
-      title: "تصاميم تُشبه فكرتك",
-      text: "من أول لمسة إلى آخر تفصيل، نصمّم ونطبع كل ما تحتاجه لمناسبتك أو مشروعك.",
-      action: "اكتشف القسم",
-      items: {
-        school: { title: "تصاميم المدارس", description: "دفاتر، شهادات، ملصقات وكل ما يميّز طلابك." },
-        gifts: { title: "تصاميم الهدايا", description: "هدايا شخصية مرتبة تُحفظ في الذاكرة." },
-        pens: { title: "أقلام مخصصة", description: "أقلام مطبوعة بهوية مشروعك أو مناسبتك." },
-        signs: { title: "تصاميم اللافتات", description: "لافتات واضحة وفخمة تخلي اسمك ظاهر." },
-        weddings: { title: "تصاميم الأعراس", description: "تفاصيل ناعمة تليق بأجمل يوم." },
-        invitations: { title: "كروت الأعراس", description: "دعوات فخمة تبقى ذكرى خاصة." },
-      },
-    },
-    gallery: {
-      eyebrow: "من الواقع",
-      title: "كل تفصيل عندنا له حكاية",
-      text: "لمسات من أعمال مطبعة الوفاء — من الفكرة إلى القطعة الجاهزة بين يديك.",
-      labels: ["هوية وهدايا", "تفاصيل المطبعة", "طباعة بتوقيعك"],
-    },
-    about: {
-      eyebrow: "لماذا الوفاء؟",
-      title: "نحوّل فكرتك إلى قطعة تترك أثرًا.",
-      text: "مطبعة الوفاء تجمع بين التصميم الدقيق، جودة الطباعة، والذوق في تنسيق الهدايا، حتى تحصل على نتيجة تفتخر بها.",
-      points: ["تصميم خاص حسب فكرتك", "طباعة بجودة واهتمام بالتفاصيل", "هدايا مميزة بتنسيق أنيق"],
-    },
-    contact: {
-      eyebrow: "لنبدأ فكرتك",
-      title: "قولوا لنا المناسبة، والباقي علينا.",
-      text: "زورونا في كفركنا، مقابل البريد، أو اتصلوا بنا مباشرة.",
-      call: "اتصل الآن",
-      location: "كفركنا – مقابل البريد",
-      phoneLabel: "للتواصل",
-    },
-    footer: "مطبعة الوفاء — حيث تتحول الفكرة إلى أثر.",
-    mobileCall: "اتصل الآن",
-  },
-  he: {
-    language: "العربية",
-    languageLabel: "מעבר לערבית",
-    brand: "דפוס אל-ופאא",
-    brandSub: "مطبعة الوفاء",
-    nav: [
-      { label: "שירותים", href: "#services" },
-      { label: "עבודות", href: "#gallery" },
-      { label: "אודות", href: "#about" },
-      { label: "יצירת קשר", href: "#contact" },
-    ],
-    hero: {
-      eyebrow: "מדפיסים רעיון, יוצרים לו נוכחות",
-      title: "לכל אירוע מגיע עיצוב שאי אפשר לשכוח.",
-      text: "עיצוב, הדפסה ומתנות אישיות עם פרטים מדויקים שעושים רושם מהרגע הראשון.",
-      primary: "דברו איתנו עכשיו",
-      secondary: "לגלריית העבודות",
-      note: "עיצוב והדפסה לכל אירוע",
-      featureOne: "פרטים יוקרתיים",
-      featureTwo: "ביצוע באהבה",
-    },
-    services: {
-      eyebrow: "התחומים שלנו",
-      title: "עיצובים שנראים בדיוק כמו הרעיון שלך",
-      text: "מהמגע הראשון ועד לפרט האחרון, אנחנו מעצבים ומדפיסים כל מה שצריך לאירוע או לעסק שלך.",
-      action: "לגלות את התחום",
-      items: {
-        school: { title: "עיצובים לבתי ספר", description: "מחברות, תעודות, מדבקות וכל מה שמייחד את התלמידים." },
-        gifts: { title: "מתנות מעוצבות", description: "מתנות אישיות ומסודרות שנשארות בזיכרון." },
-        pens: { title: "עטים ממותגים", description: "עטים מודפסים עם המיתוג של העסק או האירוע שלך." },
-        signs: { title: "עיצובי שילוט", description: "שלטים ברורים ויוקרתיים שמבליטים את השם שלך." },
-        weddings: { title: "עיצובי חתונה", description: "פרטים עדינים שמתאימים ליום הכי יפה." },
-        invitations: { title: "הזמנות לחתונה", description: "הזמנות יוקרתיות שנשארות כמזכרת." },
-      },
-    },
-    gallery: {
-      eyebrow: "מהשטח",
-      title: "לכל פרט אצלנו יש סיפור",
-      text: "נגיעות מעבודות דפוס אל-ופאא — מהרעיון ועד למוצר המוכן בידיים שלך.",
-      labels: ["מיתוג ומתנות", "פרטים מבית הדפוס", "הדפסה עם חתימה שלך"],
-    },
-    about: {
-      eyebrow: "למה אל-ופאא?",
-      title: "הופכים את הרעיון שלך לפריט שמשאיר חותם.",
-      text: "דפוס אל-ופאא משלב עיצוב מדויק, איכות הדפסה וטעם טוב באריזת מתנות, כדי שתקבלו תוצאה שאפשר להתגאות בה.",
-      points: ["עיצוב אישי לפי הרעיון שלך", "הדפסה איכותית ותשומת לב לפרטים", "מתנות מיוחדות באריזה אלגנטית"],
-    },
-    contact: {
-      eyebrow: "בואו נתחיל רעיון",
-      title: "ספרו לנו על האירוע, ואנחנו נדאג לשאר.",
-      text: "בקרו אותנו בכפר כנא, מול הדואר, או התקשרו אלינו ישירות.",
-      call: "התקשרו עכשיו",
-      location: "כפר כנא – מול הדואר",
-      phoneLabel: "ליצירת קשר",
-    },
-    footer: "דפוס אל-ופאא — הרעיון שלכם, חותם שנשאר.",
-    mobileCall: "התקשרו עכשיו",
-  },
+  ar: { language:"עברית", languageLabel:"التبديل إلى العبرية", brand:"مطبعة الوفاء", brandSub:"בית דפוס אל-ופאא", nav:[['الخدمات','#services'],['فيديو أعمالنا','#video'],['هويتنا','#identity'],['تواصل','#contact']], hero:{eyebrow:"تصميم • طباعة • إهداء",title:"نطبع فكرتك بألوانٍ تحكي عنها.",text:"من بطاقة صغيرة إلى هوية كاملة، نحول مناسبتك أو مشروعك إلى تصميم مطبوع يلفت النظر ويظل في الذاكرة.",primary:"راسلنا على واتساب",secondary:"شاهد أعمالنا",note:"ألوان حقيقية. طباعة تترك أثرًا."}, services:{eyebrow:"كل ما تحتاجه في مكان واحد",title:"تصاميم تأخذ شكل فكرتك",text:"نصمّم ونطبع بلمسة خاصة — لهدية، مدرسة، عرس أو مشروعك القادم.",action:"اطلب تصميمك",items:[['تصاميم المدارس','دفاتر، شهادات، ملصقات وهدايا للطلاب.'],['هدايا بتصميم شخصي','أكواب، بوكسات وتفاصيل تبقى ذكرى.'],['أقلام مخصصة','أقلام مطبوعة باسمك أو هوية مشروعك.'],['لافتات وبنرات','تصميم واضح وحضور قوي لمكانك.'],['تصاميم الأعراس','كل التفاصيل التي تليق بأجمل يوم.'],['كروت الأعراس','دعوات مميزة تبدأ بها الحكاية.']]}, video:{eyebrow:"من أرض الواقع",title:"شوفوا الفكرة وهي تصير واقع.",text:"لقطات من أعمالنا وتنفيذنا — لأن النتيجة أهم من أي كلام.",badge:"فيديو من أعمال الوفاء"}, identity:{eyebrow:"هوية الوفاء",title:"ألوان طباعة… وحضور ما بيننسى.",text:"السماوي، الفوشي والأصفر هي روح مطبعة الوفاء: جريئة، واضحة ومليانة حياة. كل تفصيل عندنا مطبوع بحب.",points:['تصميم مخصص لكل فكرة','دقة في الطباعة والتشطيب','تنسيق هدايا جاهز للإهداء']}, contact:{eyebrow:"خلّينا نبدأ",title:"عندك فكرة؟ ابعثها إلنا.",text:"راسلنا على واتساب، اتصل بنا أو تابع أعمالنا الجديدة على إنستغرام.",wa:"واتساب مباشر",instagram:"تابعنا على إنستغرام",location:"كفركنا – بجانب زول ستوك",phoneLabel:"للتواصل"},footer:"مطبعة الوفاء — نطبع فكرتك ونلوّن أثرها.",mobileCall:"واتساب" },
+  he: { language:"العربية", languageLabel:"מעבר לערבית", brand:"דפוס אל-ופאא", brandSub:"مطبعة الوفاء", nav:[['שירותים','#services'],['וידאו עבודות','#video'],['הזהות שלנו','#identity'],['יצירת קשר','#contact']], hero:{eyebrow:"עיצוב • הדפסה • מתנות",title:"מדפיסים את הרעיון שלך בצבעים שמדברים עליו.",text:"מכרטיס קטן ועד זהות שלמה, אנחנו הופכים כל אירוע או עסק לעיצוב מודפס שתופס את העין ונשאר בזיכרון.",primary:"שלחו וואטסאפ",secondary:"לצפייה בעבודות",note:"צבעים אמיתיים. הדפסה שמשאירה חותם."}, services:{eyebrow:"כל מה שצריך במקום אחד",title:"עיצובים שמקבלים את הצורה של הרעיון שלך",text:"אנחנו מעצבים ומדפיסים בנגיעה אישית — למתנה, לבית ספר, לחתונה או לעסק הבא שלך.",action:"הזמינו עיצוב",items:[['עיצובים לבתי ספר','מחברות, תעודות, מדבקות ומתנות לתלמידים.'],['מתנות בעיצוב אישי','ספלים, מארזים ופרטים שנשארים כמזכרת.'],['עטים ממותגים','עטים מודפסים עם השם או המיתוג שלך.'],['שלטים ובאנרים','עיצוב ברור ונוכחות חזקה למקום שלך.'],['עיצובי חתונה','כל הפרטים שמתאימים ליום הכי יפה.'],['הזמנות לחתונה','הזמנות מיוחדות שמתחילות את הסיפור.']]}, video:{eyebrow:"מהשטח",title:"רואים איך רעיון הופך למציאות.",text:"רגעים מהעבודות ומהביצוע שלנו — כי התוצאה חשובה יותר מכל מילה.",badge:"וידאו מעבודות אל-ופאא"}, identity:{eyebrow:"הזהות של אל-ופאא",title:"צבעי דפוס ונוכחות שאי אפשר לשכוח.",text:"תכלת, פוקסיה וצהוב הם הרוח של דפוס אל-ופאא: נועזים, ברורים ומלאי חיים. כל פרט מודפס אצלנו באהבה.",points:['עיצוב אישי לכל רעיון','דיוק בהדפסה ובגימור','מתנות מעוצבות ומוכנות להענקה']}, contact:{eyebrow:"בואו נתחיל",title:"יש לכם רעיון? שלחו אותו אלינו.",text:"שלחו וואטסאפ, התקשרו או עקבו אחרי העבודות החדשות שלנו באינסטגרם.",wa:"וואטסאפ ישיר",instagram:"עקבו באינסטגרם",location:"כפר כנא – ליד זול סטוק",phoneLabel:"ליצירת קשר"},footer:"דפוס אל-ופאא — מדפיסים את הרעיון וצובעים את החותם.",mobileCall:"וואטסאפ" }
 } as const;
 
-const serviceIcons = [School, Gift, PenTool, Printer, Heart, Sparkles];
+const serviceIcons = [School, Gift, PenTool, Printer, Heart, Palette];
 
 export default function Home() {
   const [locale, setLocale] = useState<Locale>("ar");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [catalog, setCatalog] = useState<CatalogItem[]>([]);
   const copy = content[locale];
-  const services = [
-    { ...copy.services.items.school, icon: serviceIcons[0], image: "/images/category-school-3d.png", className: "school-card" },
-    { ...copy.services.items.gifts, icon: serviceIcons[1], image: "/images/category-gifts-3d.png", className: "gifts-card" },
-    { ...copy.services.items.pens, icon: serviceIcons[2], image: "/images/category-gifts-3d.png", className: "pens-card" },
-    { ...copy.services.items.signs, icon: serviceIcons[3], image: "/images/al-wafaa-studio.jpeg", className: "signs-card" },
-    { ...copy.services.items.weddings, icon: serviceIcons[4], image: "/images/category-wedding-3d.png", className: "weddings-card" },
-    { ...copy.services.items.invitations, icon: serviceIcons[5], image: "/images/category-wedding-3d.png", className: "invitations-card" },
-  ];
-
-  const toggleLocale = () => setLocale((current) => (current === "ar" ? "he" : "ar"));
-  const closeMenu = () => setMenuOpen(false);
-
-  return (
-    <main className="site-shell" dir="rtl" lang={locale === "ar" ? "ar" : "he"}>
-      <div className="grain" aria-hidden="true" />
-
-      <header className="site-header">
-        <a href="#top" className="brand-lockup" aria-label={copy.brand}>
-          <span className="brand-logo">
-            <img src="/images/al-wafaa-logo-source.jpeg" alt="شعار مطبعة الوفاء" />
-          </span>
-          <span className="brand-copy">
-            <strong>{copy.brand}</strong>
-            <small>{copy.brandSub}</small>
-          </span>
-        </a>
-        <nav className="desktop-nav" aria-label={locale === "ar" ? "التنقل الرئيسي" : "ניווט ראשי"}>
-          {copy.nav.map((item) => (
-            <a key={item.href} href={item.href}>{item.label}</a>
-          ))}
-        </nav>
-        <div className="header-actions">
-          <button className="language-switch" type="button" onClick={toggleLocale} aria-label={copy.languageLabel}>
-            <span className="language-dot" />
-            {copy.language}
-          </button>
-          <a className="header-phone" href="tel:+972526269162">
-            <Phone size={15} />
-            <span>052-6269162</span>
-          </a>
-          <button
-            className="menu-toggle"
-            type="button"
-            onClick={() => setMenuOpen((open) => !open)}
-            aria-label={menuOpen ? (locale === "ar" ? "إغلاق القائمة" : "סגירת התפריט") : locale === "ar" ? "فتح القائمة" : "פתיחת התפריט"}
-            aria-expanded={menuOpen}
-          >
-            {menuOpen ? <X size={22} /> : <Menu size={23} />}
-          </button>
-        </div>
-      </header>
-
-      <div className={"mobile-menu" + (menuOpen ? " is-open" : "")}>
-        {copy.nav.map((item) => (
-          <a key={item.href} href={item.href} onClick={closeMenu}>
-            {item.label}
-            <ChevronLeft size={17} />
-          </a>
-        ))}
-        <a className="mobile-menu-call" href="tel:+972526269162" onClick={closeMenu}>
-          <Phone size={17} />
-          052-6269162
-        </a>
-      </div>
-
-      <section className="hero-section" id="top">
-        <div className="hero-copy">
-          <div className="eyebrow">
-            <Sparkles size={15} />
-            <span>{copy.hero.eyebrow}</span>
-          </div>
-          <h1>{copy.hero.title}</h1>
-          <p>{copy.hero.text}</p>
-          <div className="hero-actions">
-            <a href="tel:+972526269162" className="button button-gold"><Phone size={17} />{copy.hero.primary}</a>
-            <a href="#gallery" className="button button-ghost"><ArrowDownLeft size={18} />{copy.hero.secondary}</a>
-          </div>
-          <div className="hero-signature">
-            <span className="signature-line" />
-            <span>{copy.hero.note}</span>
-          </div>
-        </div>
-
-        <div className="hero-art" aria-label={copy.hero.note}>
-          <div className="gold-orb gold-orb-one" aria-hidden="true" />
-          <div className="gold-orb gold-orb-two" aria-hidden="true" />
-          <div className="hero-art-card">
-            <div className="hero-photo-wrap">
-              <img src="/images/al-wafaa-poster.jpeg" alt="أعمال مطبعة الوفاء" />
-              <div className="hero-photo-shine" />
-            </div>
-            <div className="hero-photo-caption"><span className="caption-mark">W</span><span>{copy.hero.note}</span></div>
-          </div>
-          <div className="floating-note floating-note-top"><span className="mini-icon"><Sparkles size={15} /></span><span>{copy.hero.featureOne}</span></div>
-          <div className="floating-note floating-note-bottom"><span className="mini-icon"><Heart size={15} /></span><span>{copy.hero.featureTwo}</span></div>
-        </div>
-      </section>
-
-      <section className="services-section" id="services">
-        <div className="section-heading">
-          <div>
-            <span className="section-kicker">{copy.services.eyebrow}</span>
-            <h2>{copy.services.title}</h2>
-          </div>
-          <p>{copy.services.text}</p>
-        </div>
-        <div className="services-grid">
-          {services.map((service) => {
-            const Icon = service.icon;
-            return (
-              <article className={"service-card " + service.className} key={service.title}>
-                <img src={service.image} alt="" aria-hidden="true" />
-                <div className="service-overlay" />
-                <div className="service-icon"><Icon size={19} strokeWidth={1.8} /></div>
-                <div className="service-content">
-                  <h3>{service.title}</h3>
-                  <p>{service.description}</p>
-                  <a href="#contact">{copy.services.action}<ChevronLeft size={17} /></a>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="gallery-section" id="gallery">
-        <div className="gallery-intro">
-          <span className="section-kicker">{copy.gallery.eyebrow}</span>
-          <h2>{copy.gallery.title}</h2>
-          <p>{copy.gallery.text}</p>
-          <div className="gallery-scroll-cue"><span /><span /><span /></div>
-        </div>
-        <div className="gallery-stack">
-          {[
-            { image: "/images/al-wafaa-poster.jpeg", label: copy.gallery.labels[0], className: "gallery-main" },
-            { image: "/images/al-wafaa-studio.jpeg", label: copy.gallery.labels[1], className: "gallery-tall" },
-            { image: "/images/al-wafaa-logo-source.jpeg", label: copy.gallery.labels[2], className: "gallery-logo" },
-          ].map((item) => (
-            <figure className={"gallery-card " + item.className} key={item.image}>
-              <img src={item.image} alt={item.label} />
-              <figcaption>{item.label}</figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
-
-      <section className="about-section" id="about">
-        <div className="about-badge">
-          <div className="badge-ring"><span>W</span></div>
-          <span>{copy.brand}</span>
-        </div>
-        <div className="about-copy">
-          <span className="section-kicker">{copy.about.eyebrow}</span>
-          <h2>{copy.about.title}</h2>
-          <p>{copy.about.text}</p>
-        </div>
-        <ul className="about-list">
-          {copy.about.points.map((point, index) => (
-            <li key={point}><span>0{index + 1}</span><p>{point}</p></li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="contact-section" id="contact">
-        <div className="contact-glow" aria-hidden="true" />
-        <div className="contact-content">
-          <span className="section-kicker">{copy.contact.eyebrow}</span>
-          <h2>{copy.contact.title}</h2>
-          <p>{copy.contact.text}</p>
-          <a href="tel:+972526269162" className="button button-light"><Phone size={18} />{copy.contact.call}</a>
-        </div>
-        <div className="contact-details">
-          <a href="tel:+972526269162" className="contact-detail">
-            <span className="contact-detail-icon"><Phone size={19} /></span>
-            <span><small>{copy.contact.phoneLabel}</small><strong dir="ltr">052-6269162</strong></span>
-          </a>
-          <div className="contact-detail">
-            <span className="contact-detail-icon"><MapPin size={19} /></span>
-            <span><small>{locale === "ar" ? "موقعنا" : "המיקום שלנו"}</small><strong>{copy.contact.location}</strong></span>
-          </div>
-        </div>
-      </section>
-
-      <footer className="site-footer">
-        <a href="#top" className="footer-brand"><span className="footer-brand-mark">W</span><span>{copy.brand}</span></a>
-        <span>{copy.footer}</span>
-        <a href="tel:+972526269162" dir="ltr">052-6269162</a>
-      </footer>
-
-      <a className="mobile-call-bar" href="tel:+972526269162"><Phone size={18} />{copy.mobileCall}</a>
-    </main>
-  );
+  useEffect(() => {
+    const loadCatalog = () => {
+      try { setCatalog(JSON.parse(localStorage.getItem(CATALOG_KEY) || "[]")); } catch { setCatalog([]); }
+    };
+    loadCatalog();
+    window.addEventListener("storage", loadCatalog);
+    return () => window.removeEventListener("storage", loadCatalog);
+  }, []);
+  return <main className="site-shell" dir="rtl" lang={locale === "ar" ? "ar" : "he"}>
+    <div className="grain" aria-hidden="true" /><div className="corner-streaks corner-streaks-top" aria-hidden="true" />
+    <header className="site-header">
+      <a href="#top" className="brand-lockup" aria-label={copy.brand}><span className="brand-mark">W</span><span className="brand-copy"><strong>{copy.brand}</strong><small>{copy.brandSub}</small></span></a>
+      <nav className="desktop-nav">{copy.nav.map(([label,href])=><a key={href} href={href}>{label}</a>)}</nav>
+      <div className="header-actions"><button className="language-switch" type="button" onClick={()=>setLocale(locale==="ar"?"he":"ar")} aria-label={copy.languageLabel}>{copy.language}</button><a className="header-phone" href="tel:+972526269162"><Phone size={15}/><span>052-6269162</span></a><button className="menu-toggle" type="button" onClick={()=>setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="menu">{menuOpen?<X size={22}/>:<Menu size={23}/>}</button></div>
+    </header>
+    <div className={'mobile-menu'+(menuOpen?' is-open':'')}>{copy.nav.map(([label,href])=><a key={href} href={href} onClick={()=>setMenuOpen(false)}>{label}<ChevronLeft size={17}/></a>)}<a className="mobile-menu-call" href={WHATSAPP}><MessageCircle size={17}/>052-6269162</a></div>
+    <section className="hero-section" id="top"><div className="hero-copy"><div className="eyebrow"><Sparkles size={15}/><span>{copy.hero.eyebrow}</span></div><h1>{copy.hero.title}</h1><p>{copy.hero.text}</p><div className="hero-actions"><a href={WHATSAPP} className="button button-primary"><MessageCircle size={18}/>{copy.hero.primary}</a><a href="#video" className="button button-ghost"><ArrowDownLeft size={18}/>{copy.hero.secondary}</a></div><div className="hero-signature"><span className="signature-line"/>{copy.hero.note}</div></div><div className="hero-art"><div className="orbit orbit-one"/><div className="orbit orbit-two"/><div className="hero-art-card"><img src="/images/al-wafaa-brand-card.jpeg" alt="هوية مطبعة الوفاء الملونة"/><span className="art-sticker">CMYK</span></div><div className="floating-chip chip-one"><Printer size={16}/>Design</div><div className="floating-chip chip-two"><Gift size={16}/>Print & Gift</div></div></section>
+    <section className="services-section" id="services"><div className="section-heading"><div><span className="section-kicker">{copy.services.eyebrow}</span><h2>{copy.services.title}</h2></div><p>{copy.services.text}</p></div><div className="services-grid">{copy.services.items.map(([title,description],index)=>{const Icon=serviceIcons[index];return <article className={`service-card service-${index+1}`} key={title}><div className="service-pattern"/><div className="service-icon"><Icon size={21}/></div><h3>{title}</h3><p>{description}</p><a href={WHATSAPP}>{copy.services.action}<ArrowDownLeft size={16}/></a></article>})}</div></section>
+    {catalog.length > 0 && <section className="catalog-section"><div className="section-heading"><div><span className="section-kicker">وصل حديثًا</span><h2>أعمال ومنتجات جديدة</h2></div><p>اختاروا التصميم الذي يعجبكم وتواصلوا معنا مباشرة.</p></div><div className="catalog-grid">{catalog.map(item=><article className="catalog-card" key={item.id}>{item.image ? <img src={item.image} alt={item.title}/> : <div className="catalog-placeholder"><Palette size={32}/></div>}<div><span>{item.category}</span><h3>{item.title}</h3><p>{item.description}</p><a href={WHATSAPP}>اطلبه الآن <ArrowDownLeft size={15}/></a></div></article>)}</div></section>}
+    <section className="video-section" id="video"><div className="video-copy"><span className="section-kicker">{copy.video.eyebrow}</span><h2>{copy.video.title}</h2><p>{copy.video.text}</p><span className="video-badge"><Sparkles size={15}/>{copy.video.badge}</span></div><div className="video-frame"><video controls playsInline preload="metadata"><source src="/videos/al-wafaa-wall-design.mp4" type="video/mp4"/></video><span className="video-glow"/></div></section>
+    <section className="identity-section" id="identity"><div className="identity-visual"><div className="identity-mark">W</div><div className="identity-slashes"/></div><div className="identity-copy"><span className="section-kicker">{copy.identity.eyebrow}</span><h2>{copy.identity.title}</h2><p>{copy.identity.text}</p><ul>{copy.identity.points.map(point=><li key={point}><span><Sparkles size={13}/></span>{point}</li>)}</ul></div></section>
+    <section className="contact-section" id="contact"><div className="contact-content"><span className="section-kicker">{copy.contact.eyebrow}</span><h2>{copy.contact.title}</h2><p>{copy.contact.text}</p><div className="contact-actions"><a className="button button-primary" href={WHATSAPP}><MessageCircle size={18}/>{copy.contact.wa}</a><a className="button button-instagram" href={INSTAGRAM} target="_blank" rel="noreferrer"><AtSign size={18}/>{copy.contact.instagram}</a></div></div><div className="contact-details"><a href="tel:+972526269162"><span><Phone size={19}/></span><div><small>{copy.contact.phoneLabel}</small><strong dir="ltr">052-6269162</strong></div></a><a href={INSTAGRAM} target="_blank" rel="noreferrer"><span><AtSign size={19}/></span><div><small>Instagram</small><strong dir="ltr">@gr.alwafaa</strong></div></a><div><span><MapPin size={19}/></span><div><small>Location</small><strong>{copy.contact.location}</strong></div></div></div></section>
+    <footer><div className="footer-brand"><span className="brand-mark">W</span><span>{copy.footer}</span></div><a href={INSTAGRAM} target="_blank" rel="noreferrer">@gr.alwafaa <AtSign size={15}/></a></footer><a href={WHATSAPP} className="mobile-cta"><MessageCircle size={19}/>{copy.mobileCall}</a>
+  </main>;
 }
