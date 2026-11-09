@@ -6,6 +6,8 @@
     "node": ">=22.13.0"
   },
   "scripts": {
+    "setup": "node scripts/setup-admin.mjs",
+    "test:catalog": "npm run build && node scripts/test-catalog.mjs",
     "install:ci": "bash scripts/install-ci.sh",
     "dev": "next dev",
     "build": "next build",
@@ -17,6 +19,7 @@
   "dependencies": {
     "@base-ui/react": "^1.7.0",
     "@hookform/resolvers": "^5.7.1",
+    "@netlify/blobs": "^11.1.7",
     "@shadcn/react": "^0.3.0",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
@@ -35,6 +38,7 @@
     "react-hook-form": "^7.85.0",
     "react-resizable-panels": "^4.12.2",
     "recharts": "^3.8.0",
+    "sharp": "^0.35.5",
     "sonner": "^2.0.8",
     "tailwind-merge": "3.6.0",
     "vaul": "^1.1.2",

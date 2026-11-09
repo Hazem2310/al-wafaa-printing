@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   title: "مطبعة الوفاء | דפוס אל-ופאא",
   description: "تصميم وطباعة وهدايا مميزة في كفركنا | עיצוב, הדפסה ומתנות בכפר כנא.",
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "/images/al-wafaa-logo.jpeg",
+    shortcut: "/images/al-wafaa-logo.jpeg",
   },
 };
 

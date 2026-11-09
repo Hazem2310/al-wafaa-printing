@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  outputFileTracingExcludes: {
+    "/*": ["./.wafaa-data/**/*", "./.env*"],
+  },
 };
 
 export default nextConfig;

@@ -1,0 +1,10 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Next.js is handled by Netlify's current framework adapter.
+# Runtime secrets must be configured in the Netlify UI, not in this file.
+# Never use a static export or drag only .next into a manual deployment.
